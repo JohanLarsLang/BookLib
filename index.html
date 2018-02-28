@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang= "en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link type="text/css" rel="stylesheet" href="style.css">
+    <link rel="icon" href="jpeg/book-logo.png">
+    <title>BookLib</title>
+  </head>
+  <body>
+    <header>
+      <img src="jpeg/book-logo.png" alt="BookLib logo">
+      <h1>BookLib</h1>
+    </header>
+      <div id="container">
+        <nav>
+            <a href="#C1"><span>Your Books</span></a>
+            <a href="#C2"><span>Add Libary</span></a>
+            <a href="#C3"><span>About</span></a>
+        </nav>
+
+      <article>
+          <h2></h2>
+
+          Titel: <input type="text" id="newTitle"> Author: <input type="text" id="newAuthor"> <button onclick="addBook()">Add</button><br><br>
+          <br>
+         Id: <input type="text" id="selectId"> <button onclick="modifyBook()">Modify</button> <button onclick="deleteBook()">Delete</button> <br><br>
+
+        <h1>My favourites books</h1>
+        <p id="listBooks">Click here to view them!</p>
+         <br>
+        <ul id="books"></ul>
+
+             <div id="message"></div>
+
+          <br>
+
+    		  <h4></h4>
+
+          <hr/>
+
+          <hr/>
+		</article>
+
+        <aside>
+
+          <div class="profile">
+            <img src="jpeg/johanlang.jpg" alt="Johan Lång">
+            <p><h3>Johan Lång</h3></p>
+            <p class="profileTitle"><em>.NET-developer</em></p>
+            <p><h4>Speciality:</h4></p>
+            <ul>
+              <li>C#, SQL, Azure</li>
+              <li>HTML, CSS, JavaScript</li>
+            </ul>
+          </div>
+
+        </aside>
+
+      </div>
+
+      <footer class="footer">Proudly present by Johan Lång.
+      <div id="copyright"><img src="jpeg/copyright-symbol.png" alt="copyright symbol" title="copyright symbol" style="position: relative; width: 10px; height: 10px;"> All Rights Reserved.</div>
+      </footer>
+
+  </body>
+
+  <script src="script.js"></script>
+  
+</html>
