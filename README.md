@@ -1,2 +1,2 @@
-# WebbAppLab2
-BookLib, your favourite book libary in JavaScript
+# BookLib
+Your favourite book libaries in JavaScript
