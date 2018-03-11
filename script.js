@@ -149,8 +149,9 @@ btnStoreBookLibName .addEventListener('click', function(event){
 function createOptionList(){
   document.getElementById("selectBookLib").innerText = "";
   let bookLibs = localStorage.getItem('allBookLib');
+  console.log('allBookLib: ' + bookLibs);
 
-  if (bookLibs = null)
+  if (bookLibs === null)
   {
     let bookLibs = 'myBooks' + ': ' + 'XHrmj';
     localStorage.setItem('allBookLib', bookLibs);
