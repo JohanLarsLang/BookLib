@@ -149,6 +149,12 @@ btnStoreBookLibName .addEventListener('click', function(event){
 function createOptionList(){
   document.getElementById("selectBookLib").innerText = "";
   let bookLibs = localStorage.getItem('allBookLib');
+
+  if (bookLibs = null)
+  {
+    let bookLibs = 'myBooks' + ': ' + 'XHrmj';
+    localStorage.setItem('allBookLib', bookLibs);
+  }
   console.log('allBookLib: ' + bookLibs);
   let bookArray = bookLibs.split(',');
   console.log('Data: ' + bookArray + 'Lenght: ' + bookArray.length)
