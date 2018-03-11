@@ -1,102 +1,798 @@
+console.log('Scriptet startar...');
 
-document.getElementById("listBooks").onclick = function() {listAllBooks()};
+window.addEventListener('load', function(){
+createOptionList()
 
-function addBook() {
+const urlRequest = 'https://www.forverkliga.se/JavaScript/api/crud.php?requestKey';
+const urlSelect = 'https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=';
+const defaultKey = 'XHrmj';
+const regKeyBookIdNewInput = new RegExp('^((?!(0))[0-9]{4})$');
+const regKeyBookId = new RegExp('^((?!(0))[0-9]{5})$');
+const regKeyBookIdInput = new RegExp('^((?!(0))[0-9]{6})$');
 
-    let addTitle = document.getElementById("newTitle").value;
-    let addAuthor = document.getElementById("newAuthor").value;
+let btnNewKey = document.getElementById('newKey');
 
-    if(addTitle == '' || addAuthor == '')
-    {
-    alert('Type a corret title and/or author!');
-  }
+btnNewKey.addEventListener('click', function(event){
+  console.log('btnNewKey clicked');
 
-    else
+  document.getElementById('newTitle').style.visibility='hidden';
+  document.getElementById('newAuthor').style.visibility='hidden';
+  document.getElementById('selectId').style.visibility='hidden';
+  document.getElementById('viewBooks').style.visibility='hidden';
+  document.getElementById('viewBooksAuthor').style.visibility='hidden';
+  document.getElementById('outputKey').style.visibility='visible';
+  document.getElementById('inputBookLibName').style.visibility='visible';
+  statusMessage.innerText = '';
+  let booklist = document.getElementById('booklist');
+  booklist.innerHTML = '';
+  selectedBookLibName.innerText = '';
+  header.innerText = '';
+  requestNewKey();
+});
+
+let outputKey = document.getElementById('outputKey');
+let btnStoreBookLibName = document.getElementById('storeBookLib');
+
+let statusMessage = document.getElementById('statusMessage');
+let btnViewBooks = document.getElementById('viewBooks');
+let btnViewBooksAuthor = document.getElementById('viewBooksAuthor');
+let btnAddBook = document.getElementById('addBook');
+let header = document.getElementById('header');
+let keySelection = document.getElementById("mySelect");
+let selectBookLib = document.getElementById("selectBookLib");
+
+document.getElementById('outputKey').style.visibility='hidden';
+document.getElementById('inputBookLibName').style.visibility='hidden';
+document.getElementById('storeBookLib').style.visibility='hidden';
+document.getElementById('deleteBook').style.visibility='hidden';
+document.getElementById('confirmDelete').style.visibility='hidden';
+document.getElementById('modifyBook').style.visibility='hidden';
+
+document.getElementById('newTitle').style.visibility='hidden';
+document.getElementById('newAuthor').style.visibility='hidden';
+document.getElementById('selectId').style.visibility='hidden';
+document.getElementById('viewBooks').style.visibility='hidden';
+document.getElementById('viewBooksAuthor').style.visibility='hidden';
+
+//inputBookLibName
+document.getElementById('inputBookLibName').value = 'Enter new BookLib name';
+
+inputBookLibName.addEventListener('click', function (event)
 {
-    let add = 'https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=XHrmj&title=' +addTitle + '&author=' +addAuthor + ';';
-    fetch(add)
-  }
-      listAllBooks();
-}
+  console.log(`key event, type=${event.type},key=${event.key}`);
 
+      if(inputBookLibName.value === 'Enter new BookLib name')
+      {
+      document.getElementById('inputBookLibName').value = '';
+      }
+});
 
-//var title = "Utvandrarna";
-//var author = "Wilhem Moberg";
+inputBookLibName.addEventListener('keypress', function (event)
+{
+  console.log(`key event, type=${event.type},key=${event.key}`);
+ let str = inputBookLibName.value;
+ var strLength = str.replace(/\s/g, "").length;
+ console.log('Str: ' + str + ' Length: ' + strLength);
 
-  function createNode(element) {
-      return document.createElement(element);
-  }
+  if(strLength < 2)
+  {
+      document.getElementById('storeBookLib').style.visibility='hidden';
+   }
+   else
+   {
+       document.getElementById('storeBookLib').style.visibility='visible';
+    }
+ });
 
-  function append(parent, el) {
-    return parent.appendChild(el);
-  }
+inputBookLibName.addEventListener('keydown', function (event)
+{
+    let evtType = event.type;
+    let key = event.key; // const {key} = event; ES6+
+    let eWhich = event.which;
+    let echarCode = event.charCode;
+    let ekeyCode = event.keyCode;
 
-/*
-  const ul = document.getElementById('authors');
-  const url = 'https://randomuser.me/api/?results=10';
+    console.log('Event type: ' + evtType + 'Key: ' + key + ' Event keyCode: ' + ekeyCode + ' Event cahrCode: ' + echarCode + ' Event which: ' + eWhich);
 
-  fetch(url)
-  .then((resp) => resp.json())
-  .then(function(data) {
-    let authors = data.results;
-    return authors.map(function(author) {
-      let li = createNode('li'),
-          // img = createNode('img'),
-          span = createNode('span');
-      //img.src = author.picture.medium;
-      span.innerHTML = `${author.name.first} ${author.name.last}`;
-      // append(li, img);
-      append(li, span);
-      append(ul, li);
-    })
-  })
-  .catch(function(error) {
-    console.log(error);
+     if (key === "Backspace")
+     {
+       let str = inputBookLibName.value;
+       var strLength = str.replace(/\s/g, "").length;
+       console.log('Str: ' + str + ' Length: ' + strLength);
+
+       if(strLength === 3 )
+       {
+           document.getElementById('storeBookLib').style.visibility='hidden';
+       }
+      else if(strLength === 0 )
+       {
+           document.getElementById('inputBookLibName').value = 'Enter BookLib name ';
+       }
+
+     }
+});
+
+ function keyEventShowStore(event){
+   console.log(`key event, type=${event.type},key=${event.key}`);
+   if ((inputBookLibName.value !='') && (outputKey.value !=''))
+   {
+     document.getElementById('storeBookLib').style.visibility='visible';
+   }
+   else if ((inputBookLibName.value ==='') || (outputKey.vaule ===''))
+   {
+     document.getElementById('storeBookLib').style.visibility='hidden';
+   }
+ }
+
+btnStoreBookLibName .addEventListener('click', function(event){
+  console.log('btnStoreBookLibName  click');
+
+  document.getElementById('newTitle').style.visibility='hidden';
+  document.getElementById('newAuthor').style.visibility='hidden';
+  document.getElementById('selectId').style.visibility='hidden';
+  document.getElementById('confirmDelete').style.visibility='hidden';
+  document.getElementById('viewBooks').style.visibility='hidden';
+  document.getElementById('viewBooksAuthor').style.visibility='hidden';
+
+  let bookLibs = localStorage.getItem('allBookLib');
+  bookLibs += ', ' + inputBookLibName.value + ': ' + outputKey.value;
+  localStorage.setItem('allBookLib', bookLibs);
+  bookLibs = localStorage.getItem('allBookLib');
+  console.log('bookLibs: ' + bookLibs);
+  document.getElementById('storeBookLib').style.visibility='hidden';
+  document.getElementById('outputKey').value = '';
+  document.getElementById('inputBookLibName').value = '';
+
+  createOptionList()
   });
 
-  */
-  const ul = document.getElementById('books');
-  const url = 'https://www.forverkliga.se/JavaScript/api/crud.php?op=select&key=XHrmj';
+function createOptionList(){
+  document.getElementById("selectBookLib").innerText = "";
+  let bookLibs = localStorage.getItem('allBookLib');
+  console.log('allBookLib: ' + bookLibs);
+  let bookArray = bookLibs.split(',');
+  console.log('Data: ' + bookArray + 'Lenght: ' + bookArray.length)
+
+  let lista = document.getElementById('selectBookLib');
+  lista.innerHTML = '<option disabled="disabled" selected="selected" style="font-size=16">Select BookLib: </option>';
+
+  for (let i=0; i < bookArray.length; i++)
+  {
+    let option =  document.createElement('option'); //skap ett HTML- element
+    option.innerText = bookArray[i];
+    lista.appendChild(option);
+  }
+}
+
+//selectBookLib
+selectBookLib.addEventListener('change', event => {
+  console.log('input change, value: ' + event.target.value);
+  document.getElementById('viewBooks').style.visibility='visible';
+  document.getElementById('viewBooksAuthor').style.visibility='visible';
+  let selectedBookLibName = document.getElementById("selectedBookLibName");
+  let selected = selectBookLib.value;
+  let bookLibName = selected.substr(0, selected .indexOf(':'));
+  let bookLibKey = selected.split(': ')[1];
+  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+  selectedBookLibName.innerHTML = 'BookLib: '  + bookLibName;
+
+  booklist.innerHTML = '';
+  listAllBooks()
+
+  document.getElementById('newTitle').style.visibility='visible';
+  document.getElementById('newAuthor').style.visibility='visible';
+  document.getElementById('selectId').style.visibility='visible';
+  document.getElementById('viewBooks').style.visibility='visible';
+  document.getElementById('viewBooksAuthor').style.visibility='visible';
+
+});
+
+
+let counter = 1;
+
+function requestNewKey()
+{
+  fetch(urlRequest)
+  .then(function(response)
+  {
+    console.log('Resonse: ' + response);
+    return response.json(); // också ett promise
+  }) //response
+    .then(function(data)
+    {
+      // data är ett objekt som innehåller serverns svar
+      console.log('Status: ' + data.status);
+      console.log('Key: ' + data.key);
+
+      statusMessage.innerText = 'Status message: Request new API-Key was ' + data.status + ' after: ' + counter +  ' request';
+      document.getElementById('outputKey').value = data.key;
+
+      if(data.status != 'success' && counter < 11)
+      {
+        counter++;
+        requestNewKey()
+       }
+      else if (data.status == 'success')
+      {
+        counter = 1;
+      }
+    }) //data
+  .catch(function(message)
+  {
+  // hantera eventuella fel
+  console.log('Message: ' + message);
+  });  //catch
+}
 
 function listAllBooks()
 {
-  fetch(url)
+  document.getElementById('outputKey').style.visibility='hidden';
+  document.getElementById('inputBookLibName').style.visibility='hidden';
+  let booklist = document.getElementById('booklist');
+
+  let selected = selectBookLib.value;
+  let bookLibName = selected.substr(0, selected .indexOf(':'));
+  let bookLibKey = selected.split(': ')[1];
+  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+  let finalUrlSelect = urlSelect + bookLibKey;
+
+  fetch(finalUrlSelect)
   .then((resp) => resp.json())
-  .then(function(data) {
-    let books = data.data;
-    return books.map(function(book) {
-      let li = createNode('li'),
-          // img = createNode('img'),
-          span = createNode('span');
-      //img.src = author.picture.medium;
-      span.innerHTML = `Title: ${book.title}, Author: ${book.author}`;
-      // append(li, img);
-      append(li, span);
-      append(ul, li);
-      message.innerHTML= `Status: ${data.status}`;
-    })
-})
+  .then(function(data)
+  {
+    console.log('Status: ' + data.status);
 
-  .catch(function(error) {
+    statusMessage.innerText = 'Status message: List books, Title - Author, was ' + data.status + ' after: ' + counter + ' request';
+    header.innerHTML = `<strong>Title, Author</strong>`;
+
+    if(data.status != 'success' && counter < 10)
+    {
+      counter++;
+      listAllBooks()
+     }
+
+    else if (data.status == 'success')
+    {
+      counter = 1;
+
+      let books = data.data;
+      let lista = '';
+      let arrayList = '';
+
+      return books.map(function(book)
+      {
+          const li =  document.createElement('li');  //Varför kan inte denna ligga utanför?
+          li.innerHTML = `<em>${book.title}</em>, by: ${book.author} -- Book Id: ${book.id}`;
+          booklist.appendChild(li);
+      }) //map
+    } // else if
+  }) //data
+  .catch(function(error)
+  {
     console.log(error);
-    message.innerHTML=error;
-    });
+  }); //catch
 }
 
-/*
- let data = {
-    title: 'Stiftelse triologin',
-    author: 'Issac Asimov'
+function listAllBooksAuthor()
+{
+document.getElementById('outputKey').style.visibility='hidden';
+document.getElementById('inputBookLibName').style.visibility='hidden';
+
+let selected = selectBookLib.value;
+let bookLibName = selected.substr(0, selected .indexOf(':'));
+let bookLibKey = selected.split(': ')[1];
+console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+let finalUrlSelect = urlSelect + bookLibKey;
+
+fetch(finalUrlSelect)
+.then((resp) => resp.json())
+.then(function(data)
+{
+  console.log('Status: ' + data.status);
+
+  statusMessage.innerText = 'Status message: List books, Author - Title, was ' + data.status + ' after: ' + counter + ' request';
+  header.innerHTML = `<strong>Author, Title</strong>`;
+
+  if(data.status != 'success' && counter < 10)
+  {
+    counter++;
+    listAllBooks()
+   }
+
+  else if (data.status == 'success')
+  {
+    counter = 1;
+
+    let books = data.data;
+    let lista = '';
+    let arrayList = '';
+
+    return books.map(function(book)
+    {
+        const li =  document.createElement('li');  //Varför kan inte denna ligga utanför?
+        li.innerHTML = `${book.author} <em>${book.title}</em> -- Book Id: ${book.id}`;
+        booklist.appendChild(li);
+    }) //map
+  } // else if
+}) //data
+.catch(function(error)
+{
+  console.log(error);
+}); //catch
 }
-// The parameters we are gonna pass to the fetch function
-let fetchData = {
-    method: 'POST',
-    body: data,
-    headers: new Headers()
-}
-fetch(url, fetchData)
-.then(function() {
-    // Handle response you get from the server
+
+// addBook
+document.getElementById('addBook').style.visibility='hidden';
+document.getElementById('newTitle').value = 'Enter new book title';
+
+newTitle.addEventListener('click', function (event)
+{
+  console.log(`key event, type=${event.type},key=${event.key}`);
+
+      if(newTitle.value === 'Enter new book title')
+      {
+      document.getElementById('newTitle').value = '';
+      }
 });
 
-*/
+newTitle.addEventListener('keypress', function (event)
+{
+  console.log(`key event, type=${event.type},key=${event.key}`);
+ let strTitle = newTitle.value;
+ var strLengthTitle = strTitle.replace(/\s/g, "").length;
+ console.log('Str: ' + strTitle + ' Length: ' + strLengthTitle);
+
+ let strAuthor = newAuthor.value;
+ var strLengthAuthor = strAuthor.replace(/\s/g, "").length;
+
+  let strBookId = selectId.value;
+  let myArray = regKeyBookId.exec(strBookId);
+  console.log('Test: ' + myArray)
+
+  if((strLengthTitle < 1) && (strLengthAuthor < 2))
+  {
+      document.getElementById('addBook').style.visibility='hidden';
+   }
+   else if((strLengthTitle >= 0) && (strLengthAuthor >= 2) && (strAuthor != 'Enter new author name'))
+   {
+       document.getElementById('addBook').style.visibility='visible';
+
+       if(myArray != null)
+       {
+       document.getElementById('modifyBook').style.visibility='visible';
+       }
+   }
+ });
+
+newTitle.addEventListener('keydown', function (event)
+{
+    let key = event.key; // const {key} = event; ES6+
+    console.log('Event type: ' + event.type + 'Key: ' + event.key + ' Event keyCode: ' + event.keyCode + ' Event cahrCode: ' + event.echarCode + ' Event which: ' + event.eWhich);
+
+     if (key === "Backspace")
+     {
+       let str = newTitle.value;
+       var strLength = str.replace(/\s/g, "").length;
+       console.log('Str: ' + str + ' Length: ' + strLength);
+
+       if(strLength === 1 )
+       {
+           document.getElementById('addBook').style.visibility='hidden';
+           document.getElementById('modifyBook').style.visibility='hidden';
+       }
+      else if(strLength === 0 )
+       {
+           document.getElementById('newTitle').value = 'Enter new book title ';
+       }
+
+     }
+});
+
+document.getElementById('newAuthor').value = 'Enter new author name';
+
+newAuthor.addEventListener('click', function (event)
+{
+  console.log(`key event, type=${event.type},key=${event.key}`);
+
+      if(newAuthor.value === 'Enter new author name')
+      {
+      document.getElementById('newAuthor').value = '';
+      }
+});
+
+newAuthor.addEventListener('keypress', function (event)
+{
+  console.log(`key event, type=${event.type},key=${event.key}`);
+ let strTitle = newTitle.value;
+ var strLengthTitle = strTitle.replace(/\s/g, "").length;
+ console.log('Str: ' + strTitle + ' Length: ' + strLengthTitle);
+
+ let strAuthor = newAuthor.value;
+ var strLengthAuthor = strAuthor.replace(/\s/g, "").length;
+
+  let strBookId = selectId.value;
+  let myArray = regKeyBookId.exec(strBookId);
+  console.log('Test: ' + myArray)
+
+  if((strLengthTitle < 1) && (strLengthAuthor < 2))
+  {
+      document.getElementById('addBook').style.visibility='hidden';
+   }
+   else if((strLengthTitle >= 0) && (strLengthAuthor >= 1) && (strTitle != 'Enter new book title'))
+   {
+       document.getElementById('addBook').style.visibility='visible';
+
+       if(myArray != null)
+       {
+       document.getElementById('modifyBook').style.visibility='visible';
+       }
+   }
+ });
+
+
+newAuthor.addEventListener('keydown', function (event)
+{
+    let key = event.key; // const {key} = event; ES6+
+    console.log('Event type: ' + event.type + 'Key: ' + event.key + ' Event keyCode: ' + event.keyCode + ' Event cahrCode: ' + event.echarCode + ' Event which: ' + event.eWhich);
+
+     if (key === "Backspace")
+     {
+       let str = newAuthor.value;
+       var strLength = str.replace(/\s/g, "").length;
+       console.log('Str: ' + str + ' Length: ' + strLength);
+
+       if(strLength === 2 )
+       {
+           document.getElementById('addBook').style.visibility='hidden';
+           document.getElementById('modifyBook').style.visibility='hidden';
+       }
+      else if(strLength === 0 )
+       {
+           document.getElementById('newAuthor').value = 'Enter new author name ';
+       }
+
+     }
+});
+
+btnAddBook.addEventListener('click', function(event){
+  console.log('btnAddBook clicked');
+  addBook()
+});
+
+document.getElementById("addBook").onclick = function() {addBook()};
+
+function addBook()
+{
+    document.getElementById('outputKey').style.visibility='hidden';
+    document.getElementById('inputBookLibName').style.visibility='hidden';
+
+    let addTitle = document.getElementById("newTitle").value;
+    let addAuthor = document.getElementById("newAuthor").value;
+    let selected = selectBookLib.value;
+    let bookLibName = selected.substr(0, selected .indexOf(':'));
+    let bookLibKey = selected.split(': ')[1];
+    console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+
+    //let addUrl = 'https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=XHrmj&title="' +addTitle + '"&author="' +addAuthor + '";';
+    let addUrl = 'https://www.forverkliga.se/JavaScript/api/crud.php?op=insert&key=';
+    let finalUrlAdd = addUrl + bookLibKey + '&title=' +addTitle + '&author=' +addAuthor + ';';
+    console.log('finalUrlAdd: ' +finalUrlAdd);
+
+    if (addTitle != 'Enter new author name' && addAuthor != 'Enter new author name')
+    {
+          fetch(finalUrlAdd)
+          .then(function(response)
+          {
+              console.log('Resonse: ' + response);
+              return response.json(); // också ett promise
+          }) //response
+          .then(function(data)
+          {
+          // data är ett objekt som innehåller serverns svar
+             console.log('Status: ' + data.status);
+             console.log('Id: ' + data.id);
+            statusMessage.innerText = 'Status message: Add book was ' + data.status + ' id: ' + data.id + ' after: ' + counter + ' request';
+
+            if(data.status != 'success' && counter < 10)
+            {
+              counter++;
+              addBook()
+            }
+            else if (data.status == 'success')
+            {
+              counter = 1;
+              document.getElementById('newAuthor').value = 'Enter new author name';
+              document.getElementById('newTitle').value = 'Enter new book title';
+            }
+          }) //data
+          .catch(function(message)
+          {
+          // hantera eventuella fel
+          console.log('Message: ' + message);
+          });  //catch
+    }
+
+    else
+    {
+        document.getElementById('newAuthor').value = 'Enter new author name';
+        document.getElementById('newTitle').value = 'Enter new book title';
+    }
+
+    let booklist = document.getElementById('booklist');
+    booklist.innerHTML = '';
+    //listAllBooks()
+
+    document.getElementById('addBook').style.visibility='hidden';
+    document.getElementById('modifyBook').style.visibility='hidden';
+    document.getElementById('deleteBook').style.visibility='hidden';
+    document.getElementById('confirmDelete').style.visibility='hidden';
+
+}
+
+  //selectId (BookId)
+  let selectId = document.getElementById("selectId");
+  document.getElementById('selectId').value = 'Enter BookId';
+
+  selectId.addEventListener('click', function (event)
+  {
+    console.log(`key event, type=${event.type},key=${event.key}`);
+
+        if(selectId.value === 'Enter BookId')
+        {
+        document.getElementById('selectId').value = '';
+        }
+
+        let strBookId = selectId.value;
+        let myArray = regKeyBookId.exec(strBookId);
+        console.log('Test: ' + myArray)
+
+        if(myArray === null)
+        {
+         document.getElementById('deleteBook').style.visibility='hidden';
+         document.getElementById('confirmDelete').style.visibility='hidden';
+        }
+
+        if(myArray != null)
+        {
+             document.getElementById('deleteBook').style.visibility='visible';
+             document.getElementById('confirmDelete').style.visibility='visible';
+             document.getElementById("confirmDelete").checked = false;
+        }
+});
+
+selectId.addEventListener('mousemove', function (event)
+{
+  console.log(`key event, type=${event.type},key=${event.key}`);
+
+      let strBookId = selectId.value;
+      let myArray = regKeyBookId.exec(strBookId);
+      console.log('Test: ' + myArray)
+
+      if(myArray === null)
+      {
+       document.getElementById('deleteBook').style.visibility='hidden';
+       document.getElementById('confirmDelete').style.visibility='hidden';
+      }
+
+      if(myArray != null)
+      {
+           document.getElementById('deleteBook').style.visibility='visible';
+           document.getElementById('confirmDelete').style.visibility='visible';
+           document.getElementById("confirmDelete").checked = false;
+      }
+});
+
+  selectId.addEventListener('keydown', function (event)
+  {
+       let key = event.key;
+
+       if (key === "Backspace")
+       {
+         let str = selectId.value;
+         var strLength = str.replace(/\s/g, "").length;
+         console.log('Str: ' + str + ' Length: ' + strLength);
+
+         let strBookId = selectId.value;
+         let myArray = regKeyBookIdInput.exec(strBookId);
+         console.log('Test: ' + myArray)
+
+         if(myArray === null)
+         {
+          document.getElementById('deleteBook').style.visibility='hidden';
+          document.getElementById('confirmDelete').style.visibility='hidden';
+         }
+
+         if(myArray != null)
+         {
+              document.getElementById('deleteBook').style.visibility='visible';
+              document.getElementById('confirmDelete').style.visibility='visible';
+              document.getElementById("confirmDelete").checked = false;
+         }
+
+         if(strLength === 0 )
+         {
+             document.getElementById('selectId').value = 'Enter BookId ';
+         }
+       }
+  });
+
+
+  selectId.addEventListener('keypress', function (event)
+  {
+    console.log(`key event, type=${event.type},key=${event.key}`);
+    let strBookId = selectId.value;
+    let myArray = regKeyBookIdNewInput.exec(strBookId);
+    console.log('Test: ' + myArray)
+    var strLength = strBookId.replace(/\s/g, "").length;
+    console.log('Str: ' + strBookId + ' Length: ' + strLength);
+
+    if(strLength > 4 )
+    {
+      document.getElementById('deleteBook').style.visibility='hidden';
+      document.getElementById('confirmDelete').style.visibility='hidden';
+    }
+
+    if(myArray != null)
+    {
+     document.getElementById('deleteBook').style.visibility='visible';
+     document.getElementById('confirmDelete').style.visibility='visible';
+     document.getElementById("confirmDelete").checked = false;
+     }
+   });
+
+  //modifyBook
+  document.getElementById("modifyBook").onclick = function() {modifyBook()};
+
+  function modifyBook()
+  {
+     document.getElementById('outputKey').style.visibility='hidden';
+     document.getElementById('inputBookLibName').style.visibility='hidden';
+
+      let addTitle = document.getElementById("newTitle").value;
+      let addAuthor = document.getElementById("newAuthor").value;
+      let selectedIdValue = document.getElementById("selectId").value;
+      let selected = selectBookLib.value;
+      let bookLibName = selected.substr(0, selected .indexOf(':'));
+      let bookLibKey = selected.split(': ')[1];
+      console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+
+      let modifyUrl = 'https://www.forverkliga.se/JavaScript/api/crud.php?op=update&key=';
+      let finalUrlModify= modifyUrl + bookLibKey + '&id=' + selectedIdValue + '&title=' +addTitle + '&author=' +addAuthor + ';';
+      console.log('finalUrlModify: ' +finalUrlModify);
+
+      fetch(finalUrlModify)
+      .then(function(response)
+      {
+          console.log('Resonse: ' + response);
+          return response.json(); // också ett promise
+      }) //response
+      .then(function(data)
+      {
+      // data är ett objekt som innehåller serverns svar
+         console.log('Status: ' + data.status);
+         //console.log('Id: ' + data.id);
+        statusMessage.innerText = 'Status message: Modify book was ' + data.status + ' after: ' + counter + ' request';
+
+        if(data.status != 'success' && counter < 10)
+        {
+          counter++;
+          modifyBook()
+        }
+        else if (data.status == 'success')
+        {
+          counter = 1;
+          document.getElementById('selectId').value = 'Enter BookId';
+          document.getElementById('newAuthor').value = 'Enter new author name';
+          document.getElementById('newTitle').value = 'Enter new book title';
+        }
+      }) //data
+      .catch(function(message)
+      {
+      // hantera eventuella fel
+      console.log('Message: ' + message);
+      });  //catch
+
+      let booklist = document.getElementById('booklist');
+      header.innerText = '';
+      booklist.innerHTML = '';
+
+      document.getElementById('addBook').style.visibility='hidden';
+      document.getElementById('modifyBook').style.visibility='hidden';
+      document.getElementById('deleteBook').style.visibility='hidden';
+      document.getElementById('confirmDelete').style.visibility='hidden';
+}
+
+//deleteBook
+  document.getElementById("deleteBook").onclick = function() {deleteBook()};
+
+
+  function deleteBook()
+  {
+    statusMessage.innerHTML = '';
+    let confirmDelete = document.getElementById("confirmDelete").checked;
+    console.log('Confirm: ' + confirmDelete)
+    if (confirmDelete === false)
+    {
+      statusMessage.innerHTML = '<strong>Plese confirm to delete</strong>'
+    }
+    else if (confirmDelete === true)
+    {
+      console.log('Confirm: ' + confirmDelete)
+      document.getElementById('outputKey').style.visibility='hidden';
+      document.getElementById('inputBookLibName').style.visibility='hidden';
+
+       let selected = selectBookLib.value;
+       let selectedIdValue = document.getElementById("selectId").value;
+       let bookLibName = selected.substr(0, selected .indexOf(':'));
+       let bookLibKey = selected.split(': ')[1];
+       console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+
+       let deleteUrl = 'https://www.forverkliga.se/JavaScript/api/crud.php?op=delete&key=';
+       let finalUrlDelete= deleteUrl + bookLibKey + '&id=' + selectedIdValue + ';';
+       console.log('finalUrlDelete: ' +finalUrlDelete);
+
+        fetch(finalUrlDelete)
+        .then(function(response)
+        {
+            console.log('Resonse: ' + response);
+            return response.json(); // också ett promise
+        }) //response
+        .then(function(data)
+        {
+        // data är ett objekt som innehåller serverns svar
+           console.log('Status: ' + data.status + ' Counter: ' + counter);
+           statusMessage.innerText = 'Status message: Delete book was ' + data.status + ' after: ' + counter + ' request';
+
+          if(data.status != 'success' && counter < 10)
+          {
+            counter++;
+            deleteBook()
+          }
+
+          else if(data.status != 'success' && counter === 10)
+          {
+            console.log('Status: ' + data.status);
+            statusMessage.innerText = 'Status message: Delete book was ' + data.status + ' after: ' + counter + ' request';
+            //confirmDelete = false;
+          }
+
+          else if (data.status == 'success')
+          {
+            counter = 1;
+            let booklist = document.getElementById('booklist');
+            header.innerText = '';
+            booklist.innerHTML = '';
+            //confirmDelete = false;
+          }
+        }) //data
+        .catch(function(message)
+        {
+        // hantera eventuella fel
+        console.log('Message: ' + message);
+        });  //catch
+
+        document.getElementById('deleteBook').style.visibility='hidden';
+        document.getElementById('confirmDelete').style.visibility='hidden';
+        document.getElementById('selectId').value = 'Enter BookId';
+        //document.getElementById("confirmDelete").checked = false;
+
+      } //if
+}
+
+btnViewBooks.addEventListener('click', function(event){
+  console.log('btnViewBooks clicked');
+  let booklist = document.getElementById('booklist');
+  booklist.innerHTML = '';
+  listAllBooks()
+});
+
+btnViewBooksAuthor.addEventListener('click', function(event){
+  console.log('btnViewBooksAuthor clicked');
+  booklist.innerHTML = '';
+  header.innerText = '';
+  listAllBooksAuthor()
+});
+
+}); //Window load
+
+console.log('Scriptet slutar...');

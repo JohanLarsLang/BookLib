@@ -3,7 +3,6 @@ body{
 }
 
 html , body {
-
   margin: 0.25em;
   padding: 0px;
   width: 100%;
@@ -20,8 +19,6 @@ header {
   background-color: hsla(0, 100%, 70%, 0.3);
 }
 
-
-
 header img {
   height: 75%;
   margin: 10px 0px 0px 10px;
@@ -30,15 +27,12 @@ header img {
   box-shadow: 0px 0px 10px #111;
 }
 
-
-
 header h1 {
   float: left;
-  font: bold  1.6em times new roman;
+  font: bold  1.6em calibri;
   color: #154360;
   margin: 5px 0px 0px 10px;
   text-shadow: 17px 17px #0066FF;
-
 }
 
 #container {
@@ -48,8 +42,6 @@ header h1 {
   height: auto;
 }
 
-
-
 nav {
 display: flex;
 flex: 1 1 auto;
@@ -58,7 +50,6 @@ flex-direction: column;
 background-color: #D6EAF8;
 padding-right: 10px;
 }
-
 
 nav > a {
   flex: 0 0 50px;
@@ -80,6 +71,7 @@ nav > a > span {
   color: #154360;
   /* text-shadow: 5px 5px #0066FF; */
   vertical-align:middle;
+  font-size: 24px;
 }
 
 nav > a:hover {
@@ -90,7 +82,6 @@ nav > a:active {
   color: #fff;
 }
 
-
 article {
   /* display: flex; */
   flex: 1 1 auto;
@@ -100,71 +91,13 @@ article {
   background-image: url("jpeg/paper.jpg");
   text-align: left;
   padding-left: 10px;
+  font-weight: bold;
 }
 
-
-
-/*
-
-article th {
-
+article li {
   text-align: left;
-
-  width: 100px;
-
-  background-color: #996600;
-
-  color: beige;
-
+  font-weight: bold;
 }
-
-
-
-article td {
-
-  background-color: white;
-
-  text-align: left;
-
-  border: 1px solid #996600;
-
-}
-
-
-
-article p , h4 {
-
-  text-align: left;
-
-  width: 90%;
-
-  margin-left: auto;
-
-  margin-right: auto;
-
-}
-
-
-
-hr {
-
-  height: 1px;
-
-  border: 0;
-
-  border-top: 1px solid #ccc;
-
-  border-color: #996600;
-
-  width: 90%;
-
-  margin-left: auto;
-
-  margin-right: auto;
-
-}
-
-*/
 
 aside {
   display: flex;
@@ -175,8 +108,6 @@ aside {
   padding-left: 10px;
   padding-right: 15px;
 }
-
-
 
 .profile {
   margin-top: 20px;
@@ -203,7 +134,6 @@ aside {
   text-align: left;
 }
 
-
 .profileTitle {
   margin: 0px 10px 0px 12px;
   float: left;
@@ -212,22 +142,17 @@ aside {
   font-weight: bold;
 }
 
-
 .profile img {
   height: 100%;
   float: left;
 }
 
-
-
 .profile h4 {
   position: absolute;
   display: block;
-  margin-top: 80px;
+  margin-top: 90px;
   margin-left: 220px;
 }
-
-
 
 .profile ul {
   position: absolute;
@@ -238,22 +163,14 @@ aside {
   font-weight: bold;
 }
 
-
-
 .profile ul p {
-
   float: none;
-
 }
-
-
 
 .profile ul li {
   font-size: : 12px;
   margin-left: 50px;
 }
-
-
 
 footer {
   width: 100%;
@@ -274,24 +191,109 @@ footer {
 }
 
 footer > p {
-
   float: right;
-
   color: white;
-
-  font-family: sans-serif;
-
+  font-family: calibri;
   font-size: 12px;
-
   margin-right: 10px;
-
   margin-left: 10px;
-
   margin-top: 10px;
-
 }
 
+.button {
+    background-color: white;
+    border: 2px solid #008CBA;;
+    background-color:
+    color: white;
+    font-size: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
+.button:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+#outputKey{
+  font-style: italic;
+  color: black;
+  background-color: white;
+  font-weight: bold;
+}
+
+.input:hover{
+  background-color: lime;
+}
+
+option{
+  font-size: 16px;
+  font-weight: bold;
+  border: 0.5px solid black;
+}
+
+option:selected{
+  font-weight: bold;
+}
+
+#selectBookLib:focus > option:checked {
+    background: blue;
+}
+
+#selectBookLib {
+    font-weight: bold;
+    font-size: 16;
+}
+
+.input{
+  font-style: italic;
+  font-size: 14px;
+  color: black;
+  border: 0.5px solid black;
+  font-weight: bold;
+}
+
+#confirmDelete{
+  position: absolute;
+  margin-top: 2px;
+}
+
+.regular-checkbox {
+	-webkit-appearance: none;
+	background-color: #fafafa;
+	border: 1px solid black; /*#cacece; */
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+	padding: 9px;
+	border-radius: 3px;
+	display: inline-block;
+	position: relative;
+  font-weight: bold;
+}
+
+.regular-checkbox:active, .regular-checkbox:checked:active {
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+  font-weight: bold;
+}
+
+.regular-checkbox:checked {
+	background-color: #e9ecee;
+  border: 1px solid black;
+	/* border: 2px solid #adb8c0; */
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+	font-weight: bold;
+  /* #99a1a7; */
+}
+
+.regular-checkbox:checked:after {
+	content: '\2714';
+	font-size: 16px;
+	position: absolute;
+	top: 0px;
+	left: 3px;
+	color: black; /*#99a1a7; */
+  font-weight: bold;
+}
 
 @media only screen and (max-width: 1000px) {
 
@@ -333,271 +335,4 @@ footer > p {
   margin-right: auto;
 }
 
-}
-
-/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
-
-/* Portrait */
-@media only screen
-  and (min-device-width: 375px)
-  and (max-device-width: 667px)
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (orientation: portrait) {
-
-    #container {
-      flex-direction: column;
-      height: auto;
-    }
-
-    #container > article {
-      width: 100%;
-      padding-left: 0px;
-    }
-
-    #container > nav {
-      width: 100%;
-      padding-right: 0px;
-    }
-
-    #container > aside {
-      width: 100%;
-      padding-left: 0px;
-      padding-bottom: 15px;
-    }
-
-    nav {
-      text-align: center;
-    }
-
-    nav li {
-        display: inline-block;
-    }
-
-    nav ul {
-      margin-left: 0px;
-    }
-
-    .profile{
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-}
-
-/* Landscape */
-@media only screen
-  and (min-device-width: 375px)
-  and (max-device-width: 667px)
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (orientation: landscape) {
-    body{
-      background-color: #D6EAF8;
-    }
-
-    html , body {
-
-      margin: 0.25em;
-      padding: 0px;
-      width: 100%;
-      height: 100%;
-      background-color: white;
-      font-family: calibri; /*times new roman; */
-     }
-
-    header {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      height: 60px;
-      background-color: hsla(0, 100%, 70%, 0.3);
-    }
-
-    header img {
-      height: 75%;
-      margin: 10px 0px 0px 10px;
-      float: left;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px #111;
-    }
-
-    header h1 {
-      float: left;
-      font: bold  1.6em times new roman;
-      color: #154360;
-      margin: 5px 0px 0px 10px;
-      text-shadow: 17px 17px #0066FF;
-
-    }
-
-    #container {
-      display: flex;
-    /*  flex: 1 1 auto; */
-      flex-direction: row;
-      height: auto;
-    }
-
-    nav {
-    display: flex;
-    flex: 1 1 auto;
-    min-width: 200px;
-    flex-direction: column;
-    background-color: #D6EAF8;
-    padding-right: 10px;
-    }
-
-
-    nav > a {
-      flex: 0 0 50px;
-      width:100%;
-      border-top: 1px solid white;
-      border-bottom: 1px solid white;
-      color: #000;
-      padding-top: 10px;
-      line-height: 40px;
-      text-align: center;
-      text-decoration: none;
-      white-space: nowrap;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px #111;
-    }
-
-    nav > a > span {
-      font: bold  1.4em times new roman;
-      color: #154360;
-      /* text-shadow: 5px 5px #0066FF; */
-      vertical-align:middle;
-    }
-
-    nav > a:hover {
-      background-color: white;
-    }
-
-    nav > a:active {
-      color: #fff;
-    }
-
-
-    article {
-      /* display: flex; */
-      flex: 1 1 auto;
-      width: 100%;
-      min-width: 380px;
-      background-color: #EBF5FB;
-      background-image: url("jpeg/paper.jpg");
-      text-align: left;
-      padding-left: 10px;
-    }
-
-    aside {
-      display: flex;
-      flex: 1 1 auto;
-      min-width: 380px;
-      flex-direction: column;
-      background-color: #D6EAF8;
-      padding-left: 10px;
-      padding-right: 15px;
-    }
-
-
-
-    .profile {
-      margin-top: 20px;
-      margin-bottom: 0px;
-      margin-left: auto;
-      margin-right: 0px;
-      width: 380px;
-      height: 180px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px #111;
-      overflow: hidden;
-      background-color: white;
-      position: relative;
-    }
-
-    .profileDescription{
-      margin-top: 2px;
-      color:#996600;
-    }
-
-    .profile h3 {
-      margin: 10px 0px 0px 10px;
-      float: left;
-      text-align: left;
-    }
-
-    .profileTitle {
-      margin: 0px 10px 0px 12px;
-      float: left;
-      text-align: left;
-      color: black;
-      font-weight: bold;
-    }
-
-    .profile img {
-      height: 100%;
-      float: left;
-    }
-
-    .profile h4 {
-      position: absolute;
-      display: block;
-      margin-top: 80px;
-      margin-left: 220px;
-    }
-
-    .profile ul {
-      position: absolute;
-      display: block;
-      margin-left: -40px;
-      bottom: -15px;
-      left: 50%;
-      font-weight: bold;
-    }
-
-    .profile ul p {
-      float: none;
-    }
-
-
-
-    .profile ul li {
-      font-size: : 12px;
-      margin-left: 50px;
-    }
-
-      footer {
-      width: 100%;
-      text-align: left;
-      height: 60px;
-      font-size: 12px;
-      color: black;
-      font-weight: bold;
-      background-color: hsla(0, 100%, 70%, 0.3);
-      margin-top: 2px;
-    }
-
-    #copyright {
-      position: absolute;
-      text-align: left;
-      margin-right: 10px;
-      margin-top: 2px;
-    }
-
-    footer > p {
-
-      float: right;
-
-      color: white;
-
-      font-family: sans-serif;
-
-      font-size: 12px;
-
-      margin-right: 10px;
-
-      margin-left: 10px;
-
-      margin-top: 10px;
-
-    }
 }

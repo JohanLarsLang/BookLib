@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link type="text/css" rel="stylesheet" href="style.css">
     <link rel="icon" href="jpeg/book-logo.png">
+    <script src="script.js"></script>
     <title>BookLib</title>
   </head>
   <body>
@@ -14,57 +15,65 @@
     </header>
       <div id="container">
         <nav>
-            <a href="#C1"><span>Your Books</span></a>
-            <a href="#C2"><span>Add Libary</span></a>
-            <a href="#C3"><span>About</span></a>
+            <a href="#C1"><span>New BookLib</span></a>
+            <a href="#C2"><span>Select BookLib</span></a>
         </nav>
 
-      <article>
-          <h2></h2>
+    <article>
+        <h2 id="C1">Create an new BookLib: </h2>
+        <button class="button" id="newKey">New BookLib-Key</button> <input type = "text" id="outputKey" size="5" disabled="disabled"/><br />
+        <br>
+        <input type = "text" id="inputBookLibName" class="input"/><br />
+        <br>
+        <button class="button" id="storeBookLib">Save BookLib name</button>
+        <br>
+        <h2 id="C2">Select BookLib: </h2>
+         <select id="selectBookLib">
+            <!--<option disabled="disabled" selected="selected">Select an option:</option> -->
+         </select>
+       <br>
+       <br>
+       <!-- <input type="text" id="newTitle" class="input"> <input type="text" id="newAuthor" class="input"> <button class="button" id="addBook" onclick="addBook()">Add</button> -->
+       <input type="text" id="newTitle" class="input"> <input type="text" id="newAuthor" class="input"> <button class="button" id="addBook">Add</button>
+       <br>
+       <br>
+       <br>
+       <div id="target">
+       <input type="text" id="selectId" size="10" class="input"> <button class="button" id="modifyBook" onclick="modifyBook()">Modify</button>
+       <button class="button" id="deleteBook" onclick="deleteBook()">Delete</button>
+       <label></label>
+          <input title="Confirm to delete" type="checkbox" id="confirmDelete" class="regular-checkbox" checked />
+       </div>
+       <br>
+       <br>
+       <div id="statusMessage"></div>
+       <br>
+       <button class="button" id="viewBooks">View Books, Title, Author</button> <button class="button" id="viewBooksAuthor">View Books, Author, Title</button>
+       <br>
+       <div id="selectedBookLibName"></div>
+       <div id="header"></div>
+       <ul id="booklist"></ul>
 
-          Titel: <input type="text" id="newTitle"> Author: <input type="text" id="newAuthor"> <button onclick="addBook()">Add</button><br><br>
-          <br>
-         Id: <input type="text" id="selectId"> <button onclick="modifyBook()">Modify</button> <button onclick="deleteBook()">Delete</button> <br><br>
-
-        <h1>My favourites books</h1>
-        <p id="listBooks">Click here to view them!</p>
-         <br>
-        <ul id="books"></ul>
-
-             <div id="message"></div>
-
-          <br>
-
-    		  <h4></h4>
-
-          <hr/>
-
-          <hr/>
 		</article>
 
         <aside>
-
           <div class="profile">
             <img src="jpeg/johanlang.jpg" alt="Johan Lång">
-            <p><h3>Johan Lång</h3></p>
+            <h3>Johan Lång</h3>
             <p class="profileTitle"><em>.NET-developer</em></p>
-            <p><h4>Speciality:</h4></p>
+            <h4>Speciality:</h4>
             <ul>
               <li>C#, SQL, Azure</li>
               <li>HTML, CSS, JavaScript</li>
             </ul>
           </div>
+      </aside>
 
-        </aside>
+    </div>
 
-      </div>
-
-      <footer class="footer">Proudly present by Johan Lång.
-      <div id="copyright"><img src="jpeg/copyright-symbol.png" alt="copyright symbol" title="copyright symbol" style="position: relative; width: 10px; height: 10px;"> All Rights Reserved. Gothenburg 180309</div>
-      </footer>
+  <footer class="footer">Proudly present by Johan Lång.
+    <div id="copyright"><img src="jpeg/copyright-symbol.png" alt="copyright symbol" title="copyright symbol" style="position: relative; width: 10px; height: 10px;"> All Rights Reserved. Gothenburg 180309</div>
+  </footer>
 
   </body>
-
-  <script src="script.js"></script>
-
 </html>
