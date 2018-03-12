@@ -760,7 +760,7 @@ selectId.addEventListener('mousemove', function (event)
           {
             console.log('Status: ' + data.status);
             statusMessage.innerText = 'Status message: Delete book was ' + data.status + ' after: ' + counter + ' request';
-            //confirmDelete = false;
+          
           }
 
           else if (data.status == 'success')
@@ -769,7 +769,7 @@ selectId.addEventListener('mousemove', function (event)
             let booklist = document.getElementById('booklist');
             header.innerText = '';
             booklist.innerHTML = '';
-            //confirmDelete = false;
+
           }
         }) //data
         .catch(function(message)
