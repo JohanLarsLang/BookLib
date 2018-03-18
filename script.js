@@ -20,6 +20,8 @@ btnNewKey.addEventListener('click', function(event){
   document.getElementById('selectId').style.visibility='hidden';
   document.getElementById('viewBooks').style.visibility='hidden';
   document.getElementById('viewBooksAuthor').style.visibility='hidden';
+  document.getElementById('sortTitle').style.visibility='hidden';
+  document.getElementById('sortAuthor').style.visibility='hidden';
   document.getElementById('outputKey').style.visibility='visible';
   document.getElementById('inputBookLibName').style.visibility='visible';
   statusMessage.innerText = '';
@@ -36,6 +38,8 @@ let btnStoreBookLibName = document.getElementById('storeBookLib');
 let statusMessage = document.getElementById('statusMessage');
 let btnViewBooks = document.getElementById('viewBooks');
 let btnViewBooksAuthor = document.getElementById('viewBooksAuthor');
+let btnSortTitle = document.getElementById('sortTitle');
+let btnSortAuthor = document.getElementById('sortAuthor')
 let btnAddBook = document.getElementById('addBook');
 let header = document.getElementById('header');
 let keySelection = document.getElementById("mySelect");
@@ -53,6 +57,8 @@ document.getElementById('newAuthor').style.visibility='hidden';
 document.getElementById('selectId').style.visibility='hidden';
 document.getElementById('viewBooks').style.visibility='hidden';
 document.getElementById('viewBooksAuthor').style.visibility='hidden';
+document.getElementById('sortTitle').style.visibility='hidden';
+document.getElementById('sortAuthor').style.visibility='hidden';
 
 //inputBookLibName
 document.getElementById('inputBookLibName').value = 'Enter new BookLib name';
@@ -191,6 +197,8 @@ selectBookLib.addEventListener('change', event => {
   document.getElementById('selectId').style.visibility='visible';
   document.getElementById('viewBooks').style.visibility='visible';
   document.getElementById('viewBooksAuthor').style.visibility='visible';
+  document.getElementById('sortTitle').style.visibility='visible';
+  document.getElementById('sortAuthor').style.visibility='visible';
 
 });
 
@@ -282,6 +290,55 @@ function listAllBooks()
 
 function listAllBooksAuthor()
 {
+  document.getElementById('outputKey').style.visibility='hidden';
+  document.getElementById('inputBookLibName').style.visibility='hidden';
+  let booklist = document.getElementById('booklist');
+
+  let selected = selectBookLib.value;
+  let bookLibName = selected.substr(0, selected .indexOf(':'));
+  let bookLibKey = selected.split(': ')[1];
+  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+  let finalUrlSelect = urlSelect + bookLibKey;
+
+  fetch(finalUrlSelect)
+  .then((resp) => resp.json())
+  .then(function(data)
+  {
+    console.log('Status: ' + data.status);
+
+    statusMessage.innerText = 'Status message: List books, Author, Title was ' + data.status + ' after: ' + counter + ' request';
+    header.innerHTML = `<strong>Title, Author</strong>`;
+
+    if(data.status != 'success' && counter < 10)
+    {
+      counter++;
+      listAllBooksAuthor()
+     }
+
+    else if (data.status == 'success')
+    {
+      counter = 1;
+
+      let books = data.data;
+      let lista = '';
+      let arrayList = '';
+
+      return books.map(function(book)
+      {
+          const li =  document.createElement('li');  //Varför kan inte denna ligga utanför?
+          li.innerHTML = `${book.author} <em>${book.title}</em> -- Book Id: ${book.id}`;
+          booklist.appendChild(li);
+      }) //map
+    } // else if
+  }) //data
+  .catch(function(error)
+  {
+    console.log(error);
+  }); //catch
+}
+
+function listAllBooksSort()
+{
 document.getElementById('outputKey').style.visibility='hidden';
 document.getElementById('inputBookLibName').style.visibility='hidden';
 
@@ -303,7 +360,7 @@ fetch(finalUrlSelect)
   if(data.status != 'success' && counter < 10)
   {
     counter++;
-    listAllBooks()
+    listAllBooksSort()
    }
 
   else if (data.status == 'success')
@@ -311,13 +368,14 @@ fetch(finalUrlSelect)
     counter = 1;
 
     let books = data.data;
+    books = books.sort();
     let lista = '';
     let arrayList = '';
 
     return books.map(function(book)
     {
         const li =  document.createElement('li');  //Varför kan inte denna ligga utanför?
-        li.innerHTML = `${book.author} <em>${book.title}</em> -- Book Id: ${book.id}`;
+        li.innerHTML = `<em>${book.title}</em>, by: ${book.author} -- Book Id: ${book.id}`;
         booklist.appendChild(li);
     }) //map
   } // else if
@@ -760,7 +818,7 @@ selectId.addEventListener('mousemove', function (event)
           {
             console.log('Status: ' + data.status);
             statusMessage.innerText = 'Status message: Delete book was ' + data.status + ' after: ' + counter + ' request';
-          
+
           }
 
           else if (data.status == 'success')
@@ -799,6 +857,141 @@ btnViewBooksAuthor.addEventListener('click', function(event){
   header.innerText = '';
   listAllBooksAuthor()
 });
+
+btnSortTitle.addEventListener('click', function(event){
+  console.log('btnSortTitle clicked');
+  booklist.innerHTML = '';
+  sortDataTitle()
+});
+
+btnSortAuthor.addEventListener('click', function(event){
+  console.log('btnSortAuthor clicked');
+  booklist.innerHTML = '';
+  sortDataAuthor()
+});
+
+
+function sortDataAuthor()
+{
+  document.getElementById('outputKey').style.visibility='hidden';
+  document.getElementById('inputBookLibName').style.visibility='hidden';
+  let booklist = document.getElementById('booklist');
+
+  let selected = selectBookLib.value;
+  let bookLibName = selected.substr(0, selected .indexOf(':'));
+  let bookLibKey = selected.split(': ')[1];
+  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+  let request = urlSelect + bookLibKey;
+
+  fetch(request).then(
+        function (response) {
+          // Examine the text in the response
+            response.json().then(function (data) {
+              console.log(data.data);
+
+              statusMessage.innerText = 'Status message: Sort books, Author - Title, was ' + data.status + ' after: ' + counter + ' request';
+              header.innerHTML = `<strong>Author, Title</strong>`;
+
+              if(data.status != 'success' && counter < 10)
+              {
+                counter++;
+                sortDataAuthor()
+               }
+
+              else if (data.status === "success")
+              {
+                counter = 1;
+
+                  let allbooks = data.data;
+                  console.log(allbooks);
+
+                 let allBooksData = allbooks.map(book => book.author + ' "<em>' + book.title + '</em>"' + ' --BookId: ' + book.id);
+
+                console.log(allBooksData);
+                 let sortBooks = allBooksData.sort();
+                 console.log(sortBooks);
+
+                let text = "<ul>";
+                for (i = 0; i < sortBooks.length; i++) {
+                text += "<li>" + sortBooks[i] + "</li>";
+                }
+                text += "</ul>";
+                console.log(text);
+                let booklist = document.getElementById('booklist');
+                booklist.innerHTML = text;
+
+                }
+                else {
+
+                }
+            });
+        }
+    )
+    .catch(function (err) {
+      console.log('Fetch Error :-S', err);
+    });
+}
+
+function sortDataTitle()
+{
+  document.getElementById('outputKey').style.visibility='hidden';
+  document.getElementById('inputBookLibName').style.visibility='hidden';
+  let booklist = document.getElementById('booklist');
+
+  let selected = selectBookLib.value;
+  let bookLibName = selected.substr(0, selected .indexOf(':'));
+  let bookLibKey = selected.split(': ')[1];
+  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+  let request = urlSelect + bookLibKey;
+
+  fetch(request).then(
+        function (response) {
+          // Examine the text in the response
+            response.json().then(function (data) {
+              console.log(data.data);
+
+              statusMessage.innerText = 'Status message: Sort books, Title - Author, was ' + data.status + ' after: ' + counter + ' request';
+              header.innerHTML = `<strong>Title, Author</strong>`;
+
+              if(data.status != 'success' && counter < 10)
+              {
+                counter++;
+                sortDataTitle()
+               }
+
+              else if (data.status === "success")
+              {
+                counter = 1;
+
+                let allbooks = data.data;
+                    console.log(allbooks);
+
+                 let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
+
+                 console.log(allBooksData);
+                 let sortBooks = allBooksData.sort();
+                 console.log(sortBooks);
+
+                let text = "<ul>";
+                for (i = 0; i < sortBooks.length; i++) {
+                text += "<li>" + sortBooks[i] + "</li>";
+                }
+                text += "</ul>";
+                console.log(text);
+                let booklist = document.getElementById('booklist');
+                booklist.innerHTML = text;
+
+                }
+                else {
+
+                }
+            });
+        }
+    )
+    .catch(function (err) {
+      console.log('Fetch Error :-S', err);
+    });
+}
 
 }); //Window load
 

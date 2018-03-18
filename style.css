@@ -180,7 +180,6 @@ footer {
   color: black;
   font-weight: bold;
   background-color: hsla(0, 100%, 70%, 0.3);
-  margin-top: 2px;
 }
 
 #copyright {
@@ -331,8 +330,12 @@ option:selected{
   }
 
   .profile{
-  margin-left: auto;
-  margin-right: auto;
-}
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+    aside{
+      width: 100%;
+    }
 
 }
