@@ -60,8 +60,97 @@ document.getElementById('viewBooksAuthor').style.visibility='hidden';
 document.getElementById('sortTitle').style.visibility='hidden';
 document.getElementById('sortAuthor').style.visibility='hidden';
 
+//searchTitleAuthor
+/*
+document.getElementById('searchTitleAuthor').value = 'Search Book Title, Author';
+searchTitleAuthor.addEventListener('click', function (event)
+{
+  console.log(`key event, type=${event.type},key=${event.key}`);
+
+      if(searchTitleAuthor.value === 'Search Book Title, Author')
+      {
+      document.getElementById('searchTitleAuthor').value = '';
+      }
+});
+
+searchTitleAuthor.addEventListener('keypress', function (event)
+{
+  console.log(`key event, type=${event.type},key=${event.key}`);
+  header.innerText = '';
+  booklist.innerHTML = '';
+
+  let selected = selectBookLib.value;
+  let bookLibName = selected.substr(0, selected .indexOf(':'));
+  let bookLibKey = selected.split(': ')[1];
+  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+  let request = urlSelect + bookLibKey;
+
+  function search()
+  {
+    fetch(request).then(
+        function (response) {
+          // Examine the text in the response
+            response.json().then(function (data) {
+              console.log(data.data);
+
+              statusMessage.innerText = 'Status message: Search Books, Title - Author, was ' + data.status + ' after: ' + counter + ' request';
+              header.innerHTML = `<strong>Title, Author</strong>`;
+
+              if(data.status != 'success' && counter < 10)
+              {
+                counter++;
+                search()
+               }
+
+              else if (data.status === "success")
+              {
+                counter = 1;
+
+                let allbooks = data.data;
+                    console.log(allbooks);
+
+                 let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
+
+                 console.log(allBooksData);
+                // let sortBooks = allBooksData.sort();
+                 //console.log(sortBooks);
+                 let str = searchTitleAuthor.value;
+                 let regKeySearch = new RegExp('*Astrid*');
+                 let myArray = regKeySearch.exec(allBooksData);
+                 console.log('Test: ' + myArray)
+
+                 let test = (x => (x != null));
+
+                allBooksData.every(test);
+
+                let text = "<ul>";
+                for (i = 0; i < allbooksData.length; i++) {
+                text += "<li>" + allbooksData[i] + "</li>";
+                }
+                text += "</ul>";
+                console.log(text);
+                let booklist = document.getElementById('booklist');
+                booklist.innerHTML = text;
+
+                }
+                else {
+
+                }
+            });
+        }
+    )
+    .catch(function (err) {
+      console.log('Fetch Error :-S', err);
+    });
+  }
+
+ });
+
+ */
+
 //inputBookLibName
 document.getElementById('inputBookLibName').value = 'Enter new BookLib name';
+
 
 inputBookLibName.addEventListener('click', function (event)
 {
@@ -270,6 +359,23 @@ function listAllBooks()
     {
       counter = 1;
 
+      let allbooks = data.data;
+      console.log(allbooks);
+
+       let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em>, by: ' + book.author + ' --BookId: ' + book.id);
+
+       console.log(allBooksData);
+
+      let text = "<ol>";
+      for (i = 0; i < allBooksData.length; i++) {
+      text += "<li>" + allBooksData[i] + "</li>";
+      }
+      text += "</ol>";
+      console.log(text);
+      let booklist = document.getElementById('booklist');
+      booklist.innerHTML = text;
+
+/*
       let books = data.data;
       let lista = '';
       let arrayList = '';
@@ -280,6 +386,8 @@ function listAllBooks()
           li.innerHTML = `<em>${book.title}</em>, by: ${book.author} -- Book Id: ${book.id}`;
           booklist.appendChild(li);
       }) //map
+
+      */
     } // else if
   }) //data
   .catch(function(error)
@@ -319,6 +427,22 @@ function listAllBooksAuthor()
     {
       counter = 1;
 
+      let allbooks = data.data;
+      console.log(allbooks);
+
+       let allBooksData = allbooks.map(book => book.author + ' "<em>' + book.author + '</em>" --BookId: ' + book.id);
+
+       console.log(allBooksData);
+
+      let text = "<ol>";
+      for (i = 0; i < allBooksData.length; i++) {
+      text += "<li>" + allBooksData[i] + "</li>";
+      }
+      text += "</ol>";
+      console.log(text);
+      let booklist = document.getElementById('booklist');
+      booklist.innerHTML = text;
+    /*
       let books = data.data;
       let lista = '';
       let arrayList = '';
@@ -329,6 +453,7 @@ function listAllBooksAuthor()
           li.innerHTML = `${book.author} <em>${book.title}</em> -- Book Id: ${book.id}`;
           booklist.appendChild(li);
       }) //map
+      */
     } // else if
   }) //data
   .catch(function(error)
