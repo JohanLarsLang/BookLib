@@ -18,6 +18,7 @@ btnNewKey.addEventListener('click', function(event){
   document.getElementById('newTitle').style.visibility='hidden';
   document.getElementById('newAuthor').style.visibility='hidden';
   document.getElementById('selectId').style.visibility='hidden';
+  document.getElementById('searchTitle').style.visibility='hidden';
   document.getElementById('viewBooks').style.visibility='hidden';
   document.getElementById('viewBooksAuthor').style.visibility='hidden';
   document.getElementById('sortTitle').style.visibility='hidden';
@@ -55,38 +56,71 @@ document.getElementById('modifyBook').style.visibility='hidden';
 document.getElementById('newTitle').style.visibility='hidden';
 document.getElementById('newAuthor').style.visibility='hidden';
 document.getElementById('selectId').style.visibility='hidden';
+document.getElementById('searchTitle').style.visibility='hidden';
 document.getElementById('viewBooks').style.visibility='hidden';
 document.getElementById('viewBooksAuthor').style.visibility='hidden';
 document.getElementById('sortTitle').style.visibility='hidden';
 document.getElementById('sortAuthor').style.visibility='hidden';
 
 //searchTitleAuthor
-/*
-document.getElementById('searchTitleAuthor').value = 'Search Book Title, Author';
-searchTitleAuthor.addEventListener('click', function (event)
+
+document.getElementById('searchTitle').value = 'Search Book Title, Author';
+
+searchTitle.addEventListener('click', function (event)
 {
   console.log(`key event, type=${event.type},key=${event.key}`);
 
-      if(searchTitleAuthor.value === 'Search Book Title, Author')
+      if(searchTitle.value === 'Search Book Title, Author')
       {
-      document.getElementById('searchTitleAuthor').value = '';
+      document.getElementById('searchTitle').value = '';
       }
 });
 
-searchTitleAuthor.addEventListener('keypress', function (event)
+searchTitle.addEventListener('keypress', function (event)
 {
   console.log(`key event, type=${event.type},key=${event.key}`);
+  statusMessage.innerText = '';
   header.innerText = '';
   booklist.innerHTML = '';
 
-  let selected = selectBookLib.value;
-  let bookLibName = selected.substr(0, selected .indexOf(':'));
-  let bookLibKey = selected.split(': ')[1];
-  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
-  let request = urlSelect + bookLibKey;
+  search()
+});
+
+searchTitle.addEventListener('keydown', function (event)
+{
+    let key = event.key; // const {key} = event; ES6+
+    console.log('Event type: ' + event.type + 'Key: ' + event.key + ' Event keyCode: ' + event.keyCode + ' Event cahrCode: ' + event.echarCode + ' Event which: ' + event.eWhich);
+
+     if (key === "Backspace")
+     {
+       let str = searchTitle.value;
+       var strLength = str.replace(/\s/g, "").length;
+       console.log('Str: ' + str + ' Length: ' + strLength);
+
+       if(strLength === 0 )
+       {
+           document.getElementById('searchTitle').value = 'Search Book Title, Author ';
+       }
+
+       statusMessage.innerText = '';
+       header.innerText = '';
+       booklist.innerHTML = '';
+
+       search()
+
+     }
+});
+
+
 
   function search()
   {
+    let selected = selectBookLib.value;
+    let bookLibName = selected.substr(0, selected .indexOf(':'));
+    let bookLibKey = selected.split(': ')[1];
+    console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+    let request = urlSelect + bookLibKey;
+
     fetch(request).then(
         function (response) {
           // Examine the text in the response
@@ -112,20 +146,20 @@ searchTitleAuthor.addEventListener('keypress', function (event)
                  let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
 
                  console.log(allBooksData);
-                // let sortBooks = allBooksData.sort();
-                 //console.log(sortBooks);
-                 let str = searchTitleAuthor.value;
-                 let regKeySearch = new RegExp('*Astrid*');
-                 let myArray = regKeySearch.exec(allBooksData);
-                 console.log('Test: ' + myArray)
+                 let sortBooks = allBooksData.sort();
+                console.log(sortBooks);
 
-                 let test = (x => (x != null));
-
-                allBooksData.every(test);
-
+                let bookstr = searchTitle.value;
                 let text = "<ul>";
-                for (i = 0; i < allbooksData.length; i++) {
-                text += "<li>" + allbooksData[i] + "</li>";
+                for (i = 0; i < sortBooks.length; i++)
+                {
+                  let str = sortBooks[i];
+                  console.log('Include: ' + str.includes(bookstr));
+                  let check = str.includes(bookstr);
+                  if (check === true )
+                  {
+                        text += "<li>" + sortBooks[i] + "</li>";
+                  }
                 }
                 text += "</ul>";
                 console.log(text);
@@ -144,9 +178,6 @@ searchTitleAuthor.addEventListener('keypress', function (event)
     });
   }
 
- });
-
- */
 
 //inputBookLibName
 document.getElementById('inputBookLibName').value = 'Enter new BookLib name';
@@ -288,6 +319,7 @@ selectBookLib.addEventListener('change', event => {
   document.getElementById('viewBooksAuthor').style.visibility='visible';
   document.getElementById('sortTitle').style.visibility='visible';
   document.getElementById('sortAuthor').style.visibility='visible';
+  document.getElementById('searchTitle').style.visibility='visible';
 
 });
 
