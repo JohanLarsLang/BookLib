@@ -35,7 +35,6 @@ btnNewKey.addEventListener('click', function(event){
 
 let outputKey = document.getElementById('outputKey');
 let btnStoreBookLibName = document.getElementById('storeBookLib');
-
 let statusMessage = document.getElementById('statusMessage');
 let btnViewBooks = document.getElementById('viewBooks');
 let btnViewBooksAuthor = document.getElementById('viewBooksAuthor');
@@ -63,7 +62,7 @@ document.getElementById('sortTitle').style.visibility='hidden';
 document.getElementById('sortAuthor').style.visibility='hidden';
 
 //searchTitleAuthor
-
+let searchTitle = document.getElementById('searchTitle');
 searchTitle.addEventListener('keypress', function (event)
 {
   console.log(`key event, type=${event.type},key=${event.key}`);
@@ -209,7 +208,7 @@ inputBookLibName.addEventListener('keydown', function (event)
 
 btnStoreBookLibName .addEventListener('click', function(event){
   console.log('btnStoreBookLibName  click');
-
+  let inputBookLibName = document.getElementById('inputBookLibName');
   document.getElementById('newTitle').style.visibility='hidden';
   document.getElementById('newAuthor').style.visibility='hidden';
   document.getElementById('selectId').style.visibility='hidden';
@@ -223,9 +222,9 @@ btnStoreBookLibName .addEventListener('click', function(event){
   bookLibs = localStorage.getItem('allBookLib');
   console.log('bookLibs: ' + bookLibs);
   document.getElementById('storeBookLib').style.visibility='hidden';
-  document.getElementById('outputKey').value = '';
-  document.getElementById('inputBookLibName').value = '';
-
+  //document.getElementById('outputKey').value = '';
+  //document.getElementById('inputBookLibName').value = '';
+  inputBookLibName.value = inputBookLibName.defaultValue;
   createOptionList()
   });
 
@@ -550,6 +549,9 @@ function addBook()
     document.getElementById('outputKey').style.visibility='hidden';
     document.getElementById('inputBookLibName').style.visibility='hidden';
 
+    let newTitle = document.getElementById("newTitle");
+    let newAuthor = document.getElementById("newAuthor");
+
     let addTitle = document.getElementById("newTitle").value;
     let addAuthor = document.getElementById("newAuthor").value;
     let selected = selectBookLib.value;
@@ -583,8 +585,9 @@ function addBook()
             else if (data.status == 'success')
             {
               counter = 1;
-              document.getElementById('newAuthor').value = 'Enter new author name';
-              document.getElementById('newTitle').value = 'Enter new book title';
+              newTitle.value = newTitle.defaultValue;
+              newAuthor.value = newAuthor.defaultValue;
+              selectId.value = selectId.defaultValue;
             }
           }) //data
           .catch(function(message)
@@ -747,6 +750,9 @@ selectId.addEventListener('mousemove', function (event)
         else if (data.status == 'success')
         {
           counter = 1;
+          newTitle.value = newTitle.defaultValue;
+          newAuthor.value = newAuthor.defaultValue;
+          selectId.value = selectId.defaultValue;
         }
       }) //data
       .catch(function(message)
@@ -825,6 +831,9 @@ selectId.addEventListener('mousemove', function (event)
             let booklist = document.getElementById('booklist');
             header.innerText = '';
             booklist.innerHTML = '';
+            newTitle.value = newTitle.defaultValue;
+            newAuthor.value = newAuthor.defaultValue;
+            selectId.value = selectId.defaultValue;
 
           }
         }) //data
