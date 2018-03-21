@@ -64,18 +64,6 @@ document.getElementById('sortAuthor').style.visibility='hidden';
 
 //searchTitleAuthor
 
-document.getElementById('searchTitle').value = 'Search Book Title, Author';
-
-searchTitle.addEventListener('click', function (event)
-{
-  console.log(`key event, type=${event.type},key=${event.key}`);
-
-      if(searchTitle.value === 'Search Book Title, Author')
-      {
-      document.getElementById('searchTitle').value = '';
-      }
-});
-
 searchTitle.addEventListener('keypress', function (event)
 {
   console.log(`key event, type=${event.type},key=${event.key}`);
@@ -93,15 +81,6 @@ searchTitle.addEventListener('keydown', function (event)
 
      if (key === "Backspace")
      {
-       let str = searchTitle.value;
-       var strLength = str.replace(/\s/g, "").length;
-       console.log('Str: ' + str + ' Length: ' + strLength);
-
-       if(strLength === 0 )
-       {
-           document.getElementById('searchTitle').value = 'Search Book Title, Author ';
-       }
-
        statusMessage.innerText = '';
        header.innerText = '';
        booklist.innerHTML = '';
@@ -110,8 +89,6 @@ searchTitle.addEventListener('keydown', function (event)
 
      }
 });
-
-
 
   function search()
   {
@@ -178,21 +155,6 @@ searchTitle.addEventListener('keydown', function (event)
     });
   }
 
-
-//inputBookLibName
-document.getElementById('inputBookLibName').value = 'Enter new BookLib name';
-
-
-inputBookLibName.addEventListener('click', function (event)
-{
-  console.log(`key event, type=${event.type},key=${event.key}`);
-
-      if(inputBookLibName.value === 'Enter new BookLib name')
-      {
-      document.getElementById('inputBookLibName').value = '';
-      }
-});
-
 inputBookLibName.addEventListener('keypress', function (event)
 {
   console.log(`key event, type=${event.type},key=${event.key}`);
@@ -230,11 +192,6 @@ inputBookLibName.addEventListener('keydown', function (event)
        {
            document.getElementById('storeBookLib').style.visibility='hidden';
        }
-      else if(strLength === 0 )
-       {
-           document.getElementById('inputBookLibName').value = 'Enter BookLib name ';
-       }
-
      }
 });
 
@@ -462,7 +419,7 @@ function listAllBooksAuthor()
       let allbooks = data.data;
       console.log(allbooks);
 
-       let allBooksData = allbooks.map(book => book.author + ' "<em>' + book.author + '</em>" --BookId: ' + book.id);
+       let allBooksData = allbooks.map(book => book.author + ' "<em>' + book.title + '</em>" --BookId: ' + book.id);
 
        console.log(allBooksData);
 
@@ -474,18 +431,6 @@ function listAllBooksAuthor()
       console.log(text);
       let booklist = document.getElementById('booklist');
       booklist.innerHTML = text;
-    /*
-      let books = data.data;
-      let lista = '';
-      let arrayList = '';
-
-      return books.map(function(book)
-      {
-          const li =  document.createElement('li');  //Varför kan inte denna ligga utanför?
-          li.innerHTML = `${book.author} <em>${book.title}</em> -- Book Id: ${book.id}`;
-          booklist.appendChild(li);
-      }) //map
-      */
     } // else if
   }) //data
   .catch(function(error)
@@ -494,68 +439,9 @@ function listAllBooksAuthor()
   }); //catch
 }
 
-function listAllBooksSort()
-{
-document.getElementById('outputKey').style.visibility='hidden';
-document.getElementById('inputBookLibName').style.visibility='hidden';
-
-let selected = selectBookLib.value;
-let bookLibName = selected.substr(0, selected .indexOf(':'));
-let bookLibKey = selected.split(': ')[1];
-console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
-let finalUrlSelect = urlSelect + bookLibKey;
-
-fetch(finalUrlSelect)
-.then((resp) => resp.json())
-.then(function(data)
-{
-  console.log('Status: ' + data.status);
-
-  statusMessage.innerText = 'Status message: List books, Author - Title, was ' + data.status + ' after: ' + counter + ' request';
-  header.innerHTML = `<strong>Author, Title</strong>`;
-
-  if(data.status != 'success' && counter < 10)
-  {
-    counter++;
-    listAllBooksSort()
-   }
-
-  else if (data.status == 'success')
-  {
-    counter = 1;
-
-    let books = data.data;
-    books = books.sort();
-    let lista = '';
-    let arrayList = '';
-
-    return books.map(function(book)
-    {
-        const li =  document.createElement('li');  //Varför kan inte denna ligga utanför?
-        li.innerHTML = `<em>${book.title}</em>, by: ${book.author} -- Book Id: ${book.id}`;
-        booklist.appendChild(li);
-    }) //map
-  } // else if
-}) //data
-.catch(function(error)
-{
-  console.log(error);
-}); //catch
-}
-
 // addBook
 document.getElementById('addBook').style.visibility='hidden';
-document.getElementById('newTitle').value = 'Enter new book title';
 
-newTitle.addEventListener('click', function (event)
-{
-  console.log(`key event, type=${event.type},key=${event.key}`);
-
-      if(newTitle.value === 'Enter new book title')
-      {
-      document.getElementById('newTitle').value = '';
-      }
-});
 
 newTitle.addEventListener('keypress', function (event)
 {
@@ -602,24 +488,7 @@ newTitle.addEventListener('keydown', function (event)
            document.getElementById('addBook').style.visibility='hidden';
            document.getElementById('modifyBook').style.visibility='hidden';
        }
-      else if(strLength === 0 )
-       {
-           document.getElementById('newTitle').value = 'Enter new book title ';
-       }
-
      }
-});
-
-document.getElementById('newAuthor').value = 'Enter new author name';
-
-newAuthor.addEventListener('click', function (event)
-{
-  console.log(`key event, type=${event.type},key=${event.key}`);
-
-      if(newAuthor.value === 'Enter new author name')
-      {
-      document.getElementById('newAuthor').value = '';
-      }
 });
 
 newAuthor.addEventListener('keypress', function (event)
@@ -668,11 +537,6 @@ newAuthor.addEventListener('keydown', function (event)
            document.getElementById('addBook').style.visibility='hidden';
            document.getElementById('modifyBook').style.visibility='hidden';
        }
-      else if(strLength === 0 )
-       {
-           document.getElementById('newAuthor').value = 'Enter new author name ';
-       }
-
      }
 });
 
@@ -698,8 +562,6 @@ function addBook()
     let finalUrlAdd = addUrl + bookLibKey + '&title=' +addTitle + '&author=' +addAuthor + ';';
     console.log('finalUrlAdd: ' +finalUrlAdd);
 
-    if (addTitle != 'Enter new author name' && addAuthor != 'Enter new author name')
-    {
           fetch(finalUrlAdd)
           .then(function(response)
           {
@@ -730,13 +592,6 @@ function addBook()
           // hantera eventuella fel
           console.log('Message: ' + message);
           });  //catch
-    }
-
-    else
-    {
-        document.getElementById('newAuthor').value = 'Enter new author name';
-        document.getElementById('newTitle').value = 'Enter new book title';
-    }
 
     let booklist = document.getElementById('booklist');
     booklist.innerHTML = '';
@@ -751,16 +606,12 @@ function addBook()
 
   //selectId (BookId)
   let selectId = document.getElementById("selectId");
-  document.getElementById('selectId').value = 'Enter BookId';
+
+  //document.getElementById('selectId').value = 'Enter BookId';
 
   selectId.addEventListener('click', function (event)
   {
     console.log(`key event, type=${event.type},key=${event.key}`);
-
-        if(selectId.value === 'Enter BookId')
-        {
-        document.getElementById('selectId').value = '';
-        }
 
         let strBookId = selectId.value;
         let myArray = regKeyBookId.exec(strBookId);
@@ -827,11 +678,6 @@ selectId.addEventListener('mousemove', function (event)
               document.getElementById('deleteBook').style.visibility='visible';
               document.getElementById('confirmDelete').style.visibility='visible';
               document.getElementById("confirmDelete").checked = false;
-         }
-
-         if(strLength === 0 )
-         {
-             document.getElementById('selectId').value = 'Enter BookId ';
          }
        }
   });
@@ -901,9 +747,6 @@ selectId.addEventListener('mousemove', function (event)
         else if (data.status == 'success')
         {
           counter = 1;
-          document.getElementById('selectId').value = 'Enter BookId';
-          document.getElementById('newAuthor').value = 'Enter new author name';
-          document.getElementById('newTitle').value = 'Enter new book title';
         }
       }) //data
       .catch(function(message)
@@ -993,9 +836,6 @@ selectId.addEventListener('mousemove', function (event)
 
         document.getElementById('deleteBook').style.visibility='hidden';
         document.getElementById('confirmDelete').style.visibility='hidden';
-        document.getElementById('selectId').value = 'Enter BookId';
-        //document.getElementById("confirmDelete").checked = false;
-
       } //if
 }
 
@@ -1121,7 +961,85 @@ function sortDataTitle()
                 let allbooks = data.data;
                     console.log(allbooks);
 
-                 let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
+                let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
+
+                 console.log(allBooksData);
+                 let sortBooks = allBooksData.sort();
+                 console.log(sortBooks);
+
+                let text = "<ul>";
+                for (i = 0; i < sortBooks.length; i++) {
+                text += "<li>" + sortBooks[i] + "</li>";
+                }
+                text += "</ul>";
+                console.log(text);
+                let booklist = document.getElementById('booklist');
+                booklist.innerHTML = text;
+
+                }
+                else {
+
+                }
+            });
+        }
+    )
+    .catch(function (err) {
+      console.log('Fetch Error :-S', err);
+    });
+}
+
+function sortData(sortKey)
+{
+  document.getElementById('outputKey').style.visibility='hidden';
+  document.getElementById('inputBookLibName').style.visibility='hidden';
+  let booklist = document.getElementById('booklist');
+
+  let selected = selectBookLib.value;
+  let bookLibName = selected.substr(0, selected .indexOf(':'));
+  let bookLibKey = selected.split(': ')[1];
+  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
+  let request = urlSelect + bookLibKey;
+  const myKey = sortKey;
+
+  fetch(request).then(
+        function (response) {
+          // Examine the text in the response
+            response.json().then(function (data) {
+              console.log(data.data);
+
+             if (myKey === 'title')
+             {
+              statusMessage.innerText = 'Status message: Sort books, Title - Author, was ' + data.status + ' after: ' + counter + ' request';
+              header.innerHTML = `<strong>Title, Author</strong>`;
+            }
+            else if (myKey === 'author')
+            {
+              statusMessage.innerText = 'Status message: Sort books, Author - Title, was ' + data.status + ' after: ' + counter + ' request';
+              header.innerHTML = `<strong>Author, Title</strong>`;
+            }
+
+              if(data.status != 'success' && counter < 10)
+              {
+                counter++;
+                sortDataTitle()
+               }
+
+              else if (data.status === "success")
+              {
+                counter = 1;
+
+                let allbooks = data.data;
+                    console.log(allbooks);
+
+                    if (myKey === 'title')
+                    {
+                      let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
+                    }
+
+                    else if (myKey === 'author')
+                    {
+                      let allBooksData = allbooks.map(book => book.author + ' "<em>' + book.title + '</em>"' + ' --BookId: ' + book.id);
+                    }
 
                  console.log(allBooksData);
                  let sortBooks = allBooksData.sort();

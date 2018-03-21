@@ -23,7 +23,7 @@
         <h2 id="C1">Create an new BookLib: </h2>
         <button class="button" id="newKey">New BookLib-Key</button> <input type = "text" id="outputKey" size="5" disabled="disabled"/><br />
         <br>
-        <input type = "text" id="inputBookLibName" class="input"/><br />
+        <input type = "text" id="inputBookLibName" size="25" class="input" placeholder="Enter new BookLib name..."/><br />
         <br>
         <button class="button" id="storeBookLib">Save BookLib name</button>
         <br>
@@ -33,17 +33,17 @@
          </select>
        <br>
        <br>
-       <input type="text" id="searchTitle" class="input">
+       <input type="text" id="searchTitle" size="30" class="input" placeholder="Search for book title, author...">
        <br>
        <br>
        <br>
        <!-- <input type="text" id="newTitle" class="input"> <input type="text" id="newAuthor" class="input"> <button class="button" id="addBook" onclick="addBook()">Add</button> -->
-       <input type="text" id="newTitle" class="input"> <input type="text" id="newAuthor" class="input"> <button class="button" id="addBook">Add</button>
+       <input type="text" id="newTitle" size="30" class="input" placeholder="Enter new book title..."> <input type="text" id="newAuthor" size="30" class="input" placeholder="Enter new book author name..."> <button class="button" id="addBook">Add</button>
        <br>
        <br>
        <br>
        <div id="target">
-       <input type="text" id="selectId" size="10" class="input"> <button class="button" id="modifyBook">Modify</button>
+       <input type="text" id="selectId" size="40" class="input" placeholder="Enter BookId to modify or delete existing book..."> <button class="button" id="modifyBook">Modify</button>
        <button class="button" id="deleteBook">Delete</button>
        <label></label>
           <input title="Confirm to delete" type="checkbox" id="confirmDelete" class="regular-checkbox" checked />
