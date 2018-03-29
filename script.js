@@ -266,7 +266,7 @@ selectBookLib.addEventListener('change', event => {
   selectedBookLibName.innerHTML = 'BookLib: '  + bookLibName;
 
   booklist.innerHTML = '';
-  listAllBooks()
+  listAllBooks('title')
 
   document.getElementById('newTitle').style.visibility='visible';
   document.getElementById('newAuthor').style.visibility='visible';
@@ -316,7 +316,7 @@ function requestNewKey()
   });  //catch
 }
 
-function listAllBooks()
+function listAllBooks(sortKey)
 {
   document.getElementById('outputKey').style.visibility='hidden';
   document.getElementById('inputBookLibName').style.visibility='hidden';
@@ -328,19 +328,30 @@ function listAllBooks()
   console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
   let finalUrlSelect = urlSelect + bookLibKey;
 
+  const myKey = sortKey;
+
   fetch(finalUrlSelect)
   .then((resp) => resp.json())
   .then(function(data)
   {
     console.log('Status: ' + data.status);
 
+    if (sortKey === 'title')
+    {
+
     statusMessage.innerText = 'Status message: List books, Title - Author, was ' + data.status + ' after: ' + counter + ' request';
     header.innerHTML = `<strong>Title, Author</strong>`;
 
+  }
+  else if (sortKey === 'author')
+  {
+    statusMessage.innerText = 'Status message: List books, Author, Title was ' + data.status + ' after: ' + counter + ' request';
+    header.innerHTML = `<strong>Title, Author</strong>`;
+  }
     if(data.status != 'success' && counter < 10)
     {
       counter++;
-      listAllBooks()
+      listAllBooks(sortKey)
      }
 
     else if (data.status == 'success')
@@ -352,6 +363,15 @@ function listAllBooks()
 
        let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em>, by: ' + book.author + ' --BookId: ' + book.id);
 
+       if (sortKey === 'title')
+       {
+
+allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em>, by: ' + book.author + ' --BookId: ' + book.id);
+}
+else if (sortKey === 'author')
+{
+  allBooksData = allbooks.map(book => book.author + ' "<em>' + book.title + '</em>" --BookId: ' + book.id);
+}
        console.log(allBooksData);
 
       let text = "<ol>";
@@ -384,59 +404,6 @@ function listAllBooks()
   }); //catch
 }
 
-function listAllBooksAuthor()
-{
-  document.getElementById('outputKey').style.visibility='hidden';
-  document.getElementById('inputBookLibName').style.visibility='hidden';
-  let booklist = document.getElementById('booklist');
-
-  let selected = selectBookLib.value;
-  let bookLibName = selected.substr(0, selected .indexOf(':'));
-  let bookLibKey = selected.split(': ')[1];
-  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
-  let finalUrlSelect = urlSelect + bookLibKey;
-
-  fetch(finalUrlSelect)
-  .then((resp) => resp.json())
-  .then(function(data)
-  {
-    console.log('Status: ' + data.status);
-
-    statusMessage.innerText = 'Status message: List books, Author, Title was ' + data.status + ' after: ' + counter + ' request';
-    header.innerHTML = `<strong>Title, Author</strong>`;
-
-    if(data.status != 'success' && counter < 10)
-    {
-      counter++;
-      listAllBooksAuthor()
-     }
-
-    else if (data.status == 'success')
-    {
-      counter = 1;
-
-      let allbooks = data.data;
-      console.log(allbooks);
-
-       let allBooksData = allbooks.map(book => book.author + ' "<em>' + book.title + '</em>" --BookId: ' + book.id);
-
-       console.log(allBooksData);
-
-      let text = "<ol>";
-      for (i = 0; i < allBooksData.length; i++) {
-      text += "<li>" + allBooksData[i] + "</li>";
-      }
-      text += "</ol>";
-      console.log(text);
-      let booklist = document.getElementById('booklist');
-      booklist.innerHTML = text;
-    } // else if
-  }) //data
-  .catch(function(error)
-  {
-    console.log(error);
-  }); //catch
-}
 
 // addBook
 document.getElementById('addBook').style.visibility='hidden';
@@ -852,150 +819,27 @@ btnViewBooks.addEventListener('click', function(event){
   console.log('btnViewBooks clicked');
   let booklist = document.getElementById('booklist');
   booklist.innerHTML = '';
-  listAllBooks()
+  listAllBooks('title')
 });
 
 btnViewBooksAuthor.addEventListener('click', function(event){
   console.log('btnViewBooksAuthor clicked');
   booklist.innerHTML = '';
   header.innerText = '';
-  listAllBooksAuthor()
+  listAllBooks('author')
 });
 
 btnSortTitle.addEventListener('click', function(event){
   console.log('btnSortTitle clicked');
   booklist.innerHTML = '';
-  sortDataTitle()
+  sortData('title')
 });
 
 btnSortAuthor.addEventListener('click', function(event){
   console.log('btnSortAuthor clicked');
   booklist.innerHTML = '';
-  sortDataAuthor()
+  sortData('author')
 });
-
-
-function sortDataAuthor()
-{
-  document.getElementById('outputKey').style.visibility='hidden';
-  document.getElementById('inputBookLibName').style.visibility='hidden';
-  let booklist = document.getElementById('booklist');
-
-  let selected = selectBookLib.value;
-  let bookLibName = selected.substr(0, selected .indexOf(':'));
-  let bookLibKey = selected.split(': ')[1];
-  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
-  let request = urlSelect + bookLibKey;
-
-  fetch(request).then(
-        function (response) {
-          // Examine the text in the response
-            response.json().then(function (data) {
-              console.log(data.data);
-
-              statusMessage.innerText = 'Status message: Sort books, Author - Title, was ' + data.status + ' after: ' + counter + ' request';
-              header.innerHTML = `<strong>Author, Title</strong>`;
-
-              if(data.status != 'success' && counter < 10)
-              {
-                counter++;
-                sortDataAuthor()
-               }
-
-              else if (data.status === "success")
-              {
-                counter = 1;
-
-                  let allbooks = data.data;
-                  console.log(allbooks);
-
-                 let allBooksData = allbooks.map(book => book.author + ' "<em>' + book.title + '</em>"' + ' --BookId: ' + book.id);
-
-                console.log(allBooksData);
-                 let sortBooks = allBooksData.sort();
-                 console.log(sortBooks);
-
-                let text = "<ul>";
-                for (i = 0; i < sortBooks.length; i++) {
-                text += "<li>" + sortBooks[i] + "</li>";
-                }
-                text += "</ul>";
-                console.log(text);
-                let booklist = document.getElementById('booklist');
-                booklist.innerHTML = text;
-
-                }
-                else {
-
-                }
-            });
-        }
-    )
-    .catch(function (err) {
-      console.log('Fetch Error :-S', err);
-    });
-}
-
-function sortDataTitle()
-{
-  document.getElementById('outputKey').style.visibility='hidden';
-  document.getElementById('inputBookLibName').style.visibility='hidden';
-  let booklist = document.getElementById('booklist');
-
-  let selected = selectBookLib.value;
-  let bookLibName = selected.substr(0, selected .indexOf(':'));
-  let bookLibKey = selected.split(': ')[1];
-  console.log('BookLibName: ' + bookLibName + ' BookLibKey: ' + bookLibKey)
-  let request = urlSelect + bookLibKey;
-
-  fetch(request).then(
-        function (response) {
-          // Examine the text in the response
-            response.json().then(function (data) {
-              console.log(data.data);
-
-              statusMessage.innerText = 'Status message: Sort books, Title - Author, was ' + data.status + ' after: ' + counter + ' request';
-              header.innerHTML = `<strong>Title, Author</strong>`;
-
-              if(data.status != 'success' && counter < 10)
-              {
-                counter++;
-                sortDataTitle()
-               }
-
-              else if (data.status === "success")
-              {
-                counter = 1;
-
-                let allbooks = data.data;
-                    console.log(allbooks);
-
-                let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
-
-                 console.log(allBooksData);
-                 let sortBooks = allBooksData.sort();
-                 console.log(sortBooks);
-
-                let text = "<ul>";
-                for (i = 0; i < sortBooks.length; i++) {
-                text += "<li>" + sortBooks[i] + "</li>";
-                }
-                text += "</ul>";
-                console.log(text);
-                let booklist = document.getElementById('booklist');
-                booklist.innerHTML = text;
-
-                }
-                else {
-
-                }
-            });
-        }
-    )
-    .catch(function (err) {
-      console.log('Fetch Error :-S', err);
-    });
-}
 
 function sortData(sortKey)
 {
@@ -1016,12 +860,12 @@ function sortData(sortKey)
             response.json().then(function (data) {
               console.log(data.data);
 
-             if (myKey === 'title')
+             if (sortKey === 'title')
              {
               statusMessage.innerText = 'Status message: Sort books, Title - Author, was ' + data.status + ' after: ' + counter + ' request';
               header.innerHTML = `<strong>Title, Author</strong>`;
             }
-            else if (myKey === 'author')
+            else if (sortKey === 'author')
             {
               statusMessage.innerText = 'Status message: Sort books, Author - Title, was ' + data.status + ' after: ' + counter + ' request';
               header.innerHTML = `<strong>Author, Title</strong>`;
@@ -1030,7 +874,7 @@ function sortData(sortKey)
               if(data.status != 'success' && counter < 10)
               {
                 counter++;
-                sortDataTitle()
+                sortData(sortKey)
                }
 
               else if (data.status === "success")
@@ -1040,14 +884,16 @@ function sortData(sortKey)
                 let allbooks = data.data;
                     console.log(allbooks);
 
-                    if (myKey === 'title')
+                    let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
+
+                    if (sortKey === 'title')
                     {
-                      let allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
+                      allBooksData = allbooks.map(book => '"<em>' + book.title + '"</em> ' + book.author + ' --BookId: ' + book.id);
                     }
 
-                    else if (myKey === 'author')
+                    else if (sortKey === 'author')
                     {
-                      let allBooksData = allbooks.map(book => book.author + ' "<em>' + book.title + '</em>"' + ' --BookId: ' + book.id);
+                      allBooksData = allbooks.map(book => book.author + ' "<em>' + book.title + '</em>"' + ' --BookId: ' + book.id);
                     }
 
                  console.log(allBooksData);
